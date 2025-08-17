@@ -4,14 +4,14 @@ import React, { useState } from "react"
 
 export default function Home() {
   const [task,settask] = useState("")
-      //  console.log(task)
 const [tasks,settasks] = useState([])
+const [textcolorchange,settextcolorchange]=useState()
 const addingtask = () => {
-  settasks([...tasks,task]);
+  settasks([...tasks,{textandcolor:task,textcolorchange}]);
   settask("")
 }
  console.log(tasks)
- 
+
 return (
   <div className="w-full h-full flex flex-col items-center">
     {/* div container */}
@@ -22,16 +22,24 @@ return (
 {/* header  */}
 <div className="flex justify-center gap-2">
   {/* input and button div */}
-  <input  onChange={(e) => {settask(e.target.value)}} value={task} className="outline-none rounded-2xl placeholder:text-center border-1" type="text" placeholder="Type Your Task Here"></input>
-  <button onClick={addingtask} className="bg-purple-600 w-30 h-10 text-white rounded-2xl cursor-pointer">Add Task</button>
-  <input type="color"></input>
+  <input  onChange={(e) => {settask(e.target.value) 
+    console.log(e.target.value)
+  }}  value={task} className="outline-none rounded-2xl placeholder:text-center border-1" type="text" placeholder="Type Your Task Here"></input>
+
+  <button onClick={()=>{
+    addingtask()
+  //  document.body.style.color=textcolorchange;
+    }} className="bg-purple-600 w-30 h-10 text-white rounded-2xl cursor-pointer">Add Task</button>
+    <input type="color" onChange={(e) =>{
+    settextcolorchange(e.target.value)
+  }}></input>
 </div>
 <div className="pt-15"></div>
 <div className="flex justify-center items-center">
   {/* input value: add user task */}
-  <ul className="list-disc">
-    {tasks.map((value,index) =>(
-      <li key={index}>{value}</li>
+  <ul id="unlisted" className="list-disc">
+    {tasks.map((inputvalue,index) =>(
+      <li key={index} style={{color:inputvalue.textcolorchange}}>{inputvalue.textandcolor}</li>
     ))}
   </ul>
 </div>
