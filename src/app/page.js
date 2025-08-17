@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 
 export default function Home() {
@@ -7,10 +7,26 @@ export default function Home() {
 const [tasks,settasks] = useState([])
 const [textcolorchange,settextcolorchange]=useState()
 const addingtask = () => {
+
+  if(task.trim()=== "") return;
+  {
   settasks([...tasks,{textandcolor:task,textcolorchange}]);
   settask("")
+  }
 }
- console.log(tasks)
+
+
+
+useEffect(() =>{
+  const save = localStorage.getItem("tasks");
+  if(save){
+    settasks(JSON.parse(save));
+  }
+}, []);
+useEffect(() =>{
+  localStorage.setItem("tasks",JSON.stringify(tasks));
+},[tasks]);
+//  console.log(tasks)
 
 return (
   <div className="w-full h-full flex flex-col items-center">
