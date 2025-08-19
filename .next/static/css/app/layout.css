@@ -333,6 +333,9 @@
   .bg-purple-600 {
     background-color: var(--color-purple-600);
   }
+  .bg-white {
+    background-color: var(--color-white);
+  }
   .pt-15 {
     padding-top: calc(var(--spacing) * 15);
   }

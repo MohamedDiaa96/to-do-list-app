@@ -40,7 +40,7 @@ return (
   {/* input and button div */}
   <input  onChange={(e) => {settask(e.target.value) 
     console.log(e.target.value)
-  }}  value={task} className="outline-none rounded-2xl placeholder:text-center border-1" type="text" placeholder="Type Your Task Here"></input>
+  }}  value={task} className="outline-none bg-white rounded-2xl placeholder:text-center border-1" type="text" placeholder="Type Your Task Here"></input>
 
   <button onClick={()=>{
     addingtask()
