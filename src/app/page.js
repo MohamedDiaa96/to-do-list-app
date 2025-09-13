@@ -1,19 +1,20 @@
 
 'use client'
-import React, { useEffect, useState } from "react"
+import React, { use, useEffect, useState } from "react"
 
 export default function Home() {
   const [task,settask] = useState("")
 const [tasks,settasks] = useState([])
-const [textcolorchange,settextcolorchange]=useState()
+// const [textcolorchange,settextcolorchange]=useState()
 
 const [taskcolorsets,settaskcolorsets] = useState("#99a1af")
 
 const addingtask = () => {
 
-  if(task.trim()=== "") return;
+  if(task.trim()=== "") return
   {
-  settasks([...tasks,{text:task,textcolorchange,taskcolorsets,favorites:false}]);
+  settasks([...tasks,{text:task,taskcolorsets,textfont,favorites:false}])
+  // ,textcolorchange
   settask("")
   }
 }
@@ -23,24 +24,24 @@ const addingtask = () => {
 // settasks(newtasklist)
 // }
 const deletetask = (index) => {
-  const newtasklist = [...tasks];  
-  newtasklist.splice(index, 1);   
-  settasks(newtasklist);          
+  const newtasklist = [...tasks]  
+  newtasklist.splice(index, 1)   
+  settasks(newtasklist)          
 }
 
 
 
 
 useEffect(() =>{
-  const save = localStorage.getItem("tasks");
+  const save = localStorage.getItem("tasks")
   if(save){
-    settasks(JSON.parse(save));
+    settasks(JSON.parse(save))
   }
 }, []);
 
 useEffect(() =>{
-  localStorage.setItem("tasks",JSON.stringify(tasks));
-},[tasks]);
+  localStorage.setItem("tasks",JSON.stringify(tasks))
+},[tasks])
 
 const toggleFavorite = (index) => {
   const newTasks = [...tasks]
@@ -51,20 +52,25 @@ const toggleFavorite = (index) => {
   const [editIndex, setEditIndex] = useState(null);
 
 const startEditTask = (index) => {
-  setEditIndex(index);
-  settask(tasks[index].text);
-  settextcolorchange(tasks[index].textcolorchange);
-  settaskcolorsets(tasks[index].taskcolorsets);
+  setEditIndex(index)
+  settask(tasks[index].text)
+  // settextcolorchange(tasks[index].textcolorchange)
+  settextfont(tasks[index].textfont)
+  settaskcolorsets(tasks[index].taskcolorsets)
 };
 
 const saveEditTask = () => {
   if (editIndex === null || task.trim() === "") return;
-  const updatedTasks = [...tasks];
-  updatedTasks[editIndex] = {...updatedTasks[editIndex],text: task,textcolorchange,taskcolorsets};
-  settasks(updatedTasks);
-  setEditIndex(null);
-  settask("");
+  const updatedTasks = [...tasks]
+  updatedTasks[editIndex] = {...updatedTasks[editIndex],text: task,textfont,taskcolorsets} 
+  // ,textcolorchange
+  settasks(updatedTasks)
+  setEditIndex(null)
+  settask("")
 }
+
+const [showform,setshowform] = useState(true)
+const [textfont ,settextfont]= useState('sans-serif')
 //  console.log(tasks)
 
 // const [datauser, setdatauser] = useState()
@@ -81,11 +87,19 @@ const saveEditTask = () => {
 return (
   <div className="w-full h-full flex flex-col items-center mb-5">
     {/* div container */}
+  
     <div className="border-2 border-black w-120 h-full border-dashed mt-5 bg-gray-100">
 {/* form border  */}
 
-    <div className="h-[30vh] w-[100%] flex justify-center items-center"><h1 className="text-3xl text-cyan-800 font-serif decoration-2 decoration-solid decoration-cyan-600 underline">To Do List App</h1></div>
+    <div className="h-[10vh] w-[100%] flex justify-center items-center"><h1 className="text-3xl text-cyan-800 font-serif decoration-2 decoration-solid decoration-cyan-600 underline">To Do List App</h1></div>
 {/* header  */}
+<div className="flex justify-center items-start h-[20vh]">
+  <button onClick={()=>{
+      setshowform(!showform)
+    }} className="bg-blue-600 text-white px-4 py-2 rounded-2xl mt-5"
+      >{showform ? "-" : "+"}</button>
+      </div>
+      {showform &&(
 <div className="flex flex-col justify-center items-center gap-2">
   {/* input and button div */}
 
@@ -99,7 +113,7 @@ return (
 <div className="flex items-center justify-center w-full h-[90%]">
 <input  onChange={(e) => {settask(e.target.value) 
     console.log(e.target.value)
-  }}  value={task} style={{color:textcolorchange}} className="outline-none rounded-2xl placeholder:text-center size-full" type="text" placeholder="Type Your Task Here"></input>
+  }}  value={task} style={{fontFamily:textfont}} className="outline-none rounded-2xl placeholder:text-center size-full" type="text" placeholder="Type Your Task Here"></input>
   </div>
   </div>
 
@@ -110,9 +124,19 @@ return (
   className="bg-purple-600 w-30 h-10 text-white rounded-2xl cursor-pointer"
 > {editIndex === null ? "Add Task" : "Save Edit"}</button>
     <div className="flex justify-center items-center gap-2">
-      <span>Text Color</span>
+      {/* <span>Text Color</span>
     <input type="color" onChange={(e) =>{
     settextcolorchange(e.target.value) 
+  }}></input> */}
+  <span>Text Font:</span>
+  <span>sans-serif</span><input type="radio"  checked={textfont === 'sans-serif'} onChange={()=>{
+settextfont('sans-serif')
+  }}></input>
+   <span>monospace</span> <input type="radio" checked={textfont === 'monospace'} onChange={()=>{
+settextfont('monospace')
+  }}></input>
+   <span>cursive</span>   <input type="radio"  checked={textfont === 'cursive'} onChange={()=>{
+settextfont('cursive')
   }}></input>
   </div>
 
@@ -136,17 +160,20 @@ return (
   </div>
 
 </div>
+
 <div className="pt-15"></div>
 
     </div>
+          )}
     </div>
+
     <div className="flex justify-center items-center pt-15 flex-wrap">
   {/* input value: add user task */}
 
       <ul id="unlisted" className= "flex gap-4">
     {tasks.map((inputvalue,index) =>(<div key={index} className=" h-full rounded-[10%] shadow-[0px_0px_10px] shadow-gray-500" style={{backgroundColor:inputvalue.taskcolorsets}}>
 <div className="flex border-b-1">
-  <div className="flex w-10 justify-center items-center">
+  <div className="flex w-[25%] justify-center items-center">
 
 <button
 onClick={()=>startEditTask(index)}
@@ -166,13 +193,32 @@ className="cursor-pointer"
 </button>
 
   </div>
-  <div className="flex justify-center items-center w-[60%]">
+  <div className="flex justify-center items-center w-[50%]">
 <li>Task-{index + 1}</li>
 </div>
+<div className="flex w-[25%] justify-center items-center">
+        <button onClick={()=>deletetask(index)}
+  className="flex items-center h-6 cursor-pointer  transition ease-in-out delay-75  text-sm font-medium rounded-md ">
+  <svg
+    stroke="currentColor"
+    viewBox="0 2 24 24"
+    fill="none"
+    className="h-5 w-5"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+      strokeWidth="2"
+      strokeLinejoin="round"
+      strokeLinecap="round"
+    ></path>
+  </svg>
+</button>
 </div>
-<li className="list-disc flex gap-5 w-50 h-full items-center justify-center p-4 break-all "  style={{color:inputvalue.textcolorchange,}}>{inputvalue.text}</li>
+</div>
+<li className="list-disc flex gap-5 w-50 h-full items-center justify-center p-4 break-all "  style={{fontFamily:inputvalue.textfont}}>{inputvalue.text}</li>
 
-<div className="flex border-t-1 items-center">
+<div className="flex border-t-1 items-center justify-center">
 <label className="">
   <input type="checkbox" checked={inputvalue.favorites}  onChange={() => toggleFavorite(index)} className="peer hidden" />
   <div className="group flex w-fit cursor-pointer items-center gap-2 overflow-hidden  fill-none p-2 px-3 font-extrabold text-amber-500 transition-all peer-checked:fill-amber-500 peer-checked:hover:scale-[120%] active:scale-90">
@@ -193,24 +239,7 @@ className="cursor-pointer"
   </div>
 </label>
 
-      <button onClick={()=>deletetask(index)}
-  className="inline-flex items-center h-6 px-4 cursor-pointer py-0 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-sm font-medium rounded-md ">
-  <svg
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    fill="none"
-    className="h-5 w-5 mr-2"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-      strokeWidth="2"
-      strokeLinejoin="round"
-      strokeLinecap="round"
-    ></path>
-  </svg>
-  Delete
-</button>
+
 </div>
 
 </div>))}
